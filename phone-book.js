@@ -4,9 +4,9 @@ var phoneBook = [];
 
 module.exports.add = function add(name, phone, email) {
 
-    name.trim();
-    phone.trim();
-    email.trim();
+    name = name.trim();
+    phone = phone.trim();
+    email = email.trim();
 
     var phoneDigits = phone.match(/\d/g);
     
@@ -17,7 +17,7 @@ module.exports.add = function add(name, phone, email) {
         }
     }
     else {
-      return;
+        return;
     }
     
     var invalidPhones = [
@@ -28,10 +28,10 @@ module.exports.add = function add(name, phone, email) {
         ];
 
     for (var i = 0; i < invalidPhones.length; i++) {
-      var patt = new RegExp(invalidPhones[i]);
-      if (patt.test(phone)) {
-          return;
-      }
+        var patt = new RegExp(invalidPhones[i]);
+        if (patt.test(phone)) {
+            return;
+        }
     }
 
     var validEmail = /^[\w\.!#$%&'*+\-\/=?\^_`{|}~]+@[\w\-]+(\.[\w]+){1,}$/;
@@ -152,8 +152,8 @@ module.exports.showTable = function showTable(filename) {
         
         var HEADER_INDEX = 0;
         if (i === HEADER_INDEX) {
-          console.log(emptyTableRow);
-          console.log('░' + Array(tableWidth - 1).join('═') + '░');
+            console.log(emptyTableRow);
+            console.log('░' + Array(tableWidth - 1).join('═') + '░');
         }
     }
     console.log(emptyTableRow);

@@ -57,6 +57,7 @@ module.exports.add = function add(name, phone, email) {
     };
 
     phoneBook.push(phoneBookEntry);
+    return true;
 };
 
 module.exports.find = function find(query) {
@@ -68,6 +69,11 @@ module.exports.find = function find(query) {
         for (var j = 0; j < phoneBookEntryKeys.length; j++) {
             var key = phoneBookEntryKeys[j];
             if (searchPatt.test(phoneBookEntry[key])) {
+                console.log([
+                    phoneBookEntry.name, 
+                    phoneBookEntry.phone, 
+                    phoneBookEntry.email
+                    ].join(', '));
                 break;
             }
         }
@@ -76,6 +82,7 @@ module.exports.find = function find(query) {
 
 module.exports.remove = function remove(query) {
 
+    var entriesRemoved = 0;
     var searchPatt = new RegExp(query);
     for (var i = 0; i < phoneBook.length; i++) {
         var phoneBookEntry = phoneBook[i];
@@ -84,13 +91,17 @@ module.exports.remove = function remove(query) {
             var key = phoneBookEntryKeys[j];
             if (searchPatt.test(phoneBookEntry[key])) {
                 phoneBook.splice(i, 1);
+                entriesRemoved += 1;
                 break;
             }
         }
     }
+    console.log(entriesRemoved + ' contact(s) have been deleted!');
 };
 
 module.exports.importFromCsv = function importFromCsv(filename) {
+    
+    var contactsAdded = 0;
     var data = require('fs').readFileSync(filename, 'utf-8');
     var dataLines = data.split('\n');
     for (var i = 0; i < dataLines.length; i++) {
@@ -99,8 +110,11 @@ module.exports.importFromCsv = function importFromCsv(filename) {
         var name = dataLineFields[0];
         var phone = dataLineFields[1];
         var email = dataLineFields[2];
-        exports.add(name, phone, email);
+        if (exports.add(name, phone, email)) {
+            contactsAdded += 1;
+        }
     }
+    console.log(contactsAdded + ' contact(s) have been added!')
 };
 
 module.exports.showTable = function showTable(filename) {

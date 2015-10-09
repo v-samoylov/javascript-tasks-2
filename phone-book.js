@@ -4,15 +4,17 @@ var phoneBook = [];
 
 module.exports.add = function add(name, phone, email) {
 
-    name = name.trim();
+    name  = name.trim();
     phone = phone.trim();
     email = email.trim();
 
     var phoneDigits = phone.match(/\d/g);
     
     if (phoneDigits) {
+        var MIN_PHONE_LENGTH = 8;
+        var MAX_PHONE_LENGTH = 15;
         var phoneLength = phoneDigits.length;
-        if (phoneLength <= 7 || phoneLength >= 15) {
+        if (phoneLength < MIN_PHONE_LENGTH || phoneLength > MAX_PHONE_LENGTH) {
             return;
         }
     }
@@ -35,6 +37,7 @@ module.exports.add = function add(name, phone, email) {
     }
 
     var validEmail = /^[\w\.!#$%&'*+\-\/=?\^_`{|}~]+@[\w\-]+(\.[\w]+){1,}$/;
+    
     var invalidEmails = [
         "^\\.|\\.@|\\.\\.",
         "@.+-\\.|@-"
@@ -51,7 +54,7 @@ module.exports.add = function add(name, phone, email) {
     }
 
     var phoneBookEntry = {
-        name: name,
+        name:  name,
         phone: phone,
         email: email
     };
@@ -107,9 +110,11 @@ module.exports.importFromCsv = function importFromCsv(filename) {
     for (var i = 0; i < dataLines.length; i++) {
         var dataLine = dataLines[i].replace('\r', '');
         var dataLineFields = dataLine.split(';');
-        var name = dataLineFields[0];
+        
+        var name  = dataLineFields[0];
         var phone = dataLineFields[1];
         var email = dataLineFields[2];
+        
         if (exports.add(name, phone, email)) {
             contactsAdded += 1;
         }
@@ -126,7 +131,7 @@ module.exports.showTable = function showTable(filename) {
     }
 
     var tableData = [header].concat(phoneBook);
-    var nameColumnWidth = 0;
+    var nameColumnWidth  = 0;
     var phoneColumnWidth = 0;
     var emailColumnWidth = 0;
 
@@ -145,22 +150,29 @@ module.exports.showTable = function showTable(filename) {
     
     var tableWidth = nameColumnWidth + phoneColumnWidth + emailColumnWidth + 10;
     var emptyTableRow = '▓' + 
-        Array(nameColumnWidth + 2).join(' ') + ' │' +
+        Array(nameColumnWidth  + 2).join(' ') + ' │' +
         Array(phoneColumnWidth + 2).join(' ') + ' │' +
         Array(emailColumnWidth + 2).join(' ') + ' ▓';
     
     console.log(Array(tableWidth + 1).join('░'));
+
     for (var i = 0; i < tableData.length; i++) {
-        var nameCellData = tableData[i].name;
-        var phoneCellData = tableData[i].phone;
-        var emailCellData = tableData[i].email;
-        var nameCellOffset = nameColumnWidth - nameCellData.length + 1;
+        var tableDataEntry = tableData[i];
+        
+        var nameCellData  = tableDataEntry.name;
+        var phoneCellData = tableDataEntry.phone;
+        var emailCellData = tableDataEntry.email;
+
+        var nameCellOffset  = nameColumnWidth  - nameCellData.length + 1;
         var phoneCellOffset = phoneColumnWidth - phoneCellData.length + 1;
         var emailCellOffset = emailColumnWidth - emailCellData.length + 1;
-        var nameCell = nameCellData + Array(nameCellOffset).join(' ');
+        
+        var nameCell  = nameCellData  + Array(nameCellOffset).join(' ');
         var phoneCell = phoneCellData + Array(phoneCellOffset).join(' ');
         var emailCell = emailCellData + Array(emailCellOffset).join(' ');
+        
         var tableRow = '▓ ' + [nameCell, phoneCell, emailCell].join(' │ ') + ' ▓';
+
         console.log(emptyTableRow);
         console.log(tableRow);
         

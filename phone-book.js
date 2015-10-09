@@ -120,7 +120,7 @@ module.exports.importFromCsv = function importFromCsv(filename) {
 module.exports.showTable = function showTable(filename) {
     
     var header = {
-        name: 'Name',
+        name:  'Name',
         phone: 'Phone',
         email: 'Email'
     }
@@ -149,7 +149,7 @@ module.exports.showTable = function showTable(filename) {
         Array(phoneColumnWidth + 2).join(' ') + ' │' +
         Array(emailColumnWidth + 2).join(' ') + ' ▓';
     
-    console.log(Array(tableWidth+1).join('░'));
+    console.log(Array(tableWidth + 1).join('░'));
     for (var i = 0; i < tableData.length; i++) {
         var nameCellData = tableData[i].name;
         var phoneCellData = tableData[i].phone;
@@ -157,10 +157,10 @@ module.exports.showTable = function showTable(filename) {
         var nameCellOffset = nameColumnWidth - nameCellData.length + 1;
         var phoneCellOffset = phoneColumnWidth - phoneCellData.length + 1;
         var emailCellOffset = emailColumnWidth - emailCellData.length + 1;
-        var nameCell = '▓ ' + nameCellData + Array(nameCellOffset + 1).join(' ') + '│';
-        var phoneCell = ' ' + phoneCellData + Array(phoneCellOffset + 1).join(' ') + '│';
-        var emailCell = ' ' + emailCellData + Array(emailCellOffset + 1).join(' ') + '▓';
-        var tableRow = nameCell + phoneCell + emailCell;
+        var nameCell = nameCellData + Array(nameCellOffset).join(' ');
+        var phoneCell = phoneCellData + Array(phoneCellOffset).join(' ');
+        var emailCell = emailCellData + Array(emailCellOffset).join(' ');
+        var tableRow = '▓ ' + [nameCell, phoneCell, emailCell].join(' │ ') + ' ▓';
         console.log(emptyTableRow);
         console.log(tableRow);
         
@@ -171,5 +171,5 @@ module.exports.showTable = function showTable(filename) {
         }
     }
     console.log(emptyTableRow);
-    console.log(Array(tableWidth+1).join('░'));
+    console.log(Array(tableWidth + 1).join('░'));
 };

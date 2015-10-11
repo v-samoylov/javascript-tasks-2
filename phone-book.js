@@ -22,20 +22,12 @@ module.exports.add = function add(name, phone, email) {
         return;
     }
     
-    var invalidPhones = [
-        "[^\\s\\+\\(\\)\\-\\d]",
-        ".+\\+",
-        "^[\\d\\s\\-\\+]+\\)|\\([\\d\\s\\-]+$",
-        "^\-|\-$"
-        ];
-
-    for (var i = 0; i < invalidPhones.length; i++) {
-        var patt = new RegExp(invalidPhones[i]);
-        if (patt.test(phone)) {
-            return;
-        }
+    var validPhone = /^(\+?\s*\d+\s*)?(\(\d+\)|\d+)\s*\d+(\s*\-?\s*\d+){1,}$/;
+        
+    if (!validPhone.test(phone)) {
+        return;
     }
-
+    
     var validEmail = /^[\w\.!#$%&'*+\-\/=?\^_`{|}~]+@[\w\-]+(\.[\w]+){1,}$/;
     
     var invalidEmails = [
@@ -119,11 +111,11 @@ module.exports.importFromCsv = function importFromCsv(filename) {
             contactsAdded += 1;
         }
     }
-    console.log(contactsAdded + ' contact(s) have been added!')
+    console.log(contactsAdded + ' contact(s) have been added!');
 };
 
 module.exports.showTable = function showTable(filename) {
-    
+
     var header = {
         name:  'Name',
         phone: 'Phone',

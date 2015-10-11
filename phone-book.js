@@ -22,7 +22,7 @@ module.exports.add = function add(name, phone, email) {
         return;
     }
     
-    var validPhone = /^(\+?\s*\d+\s*)?(\(\d+\)|\d+)\s*\d+(\s*\-?\s*\d+){1,}$/;
+    var validPhone = /^(\+?\s*\d+\s*)?(\(\d+\)|\d+)(\s*\-?\s*\d+){1,}$/;;
         
     if (!validPhone.test(phone)) {
         return;

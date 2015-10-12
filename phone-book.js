@@ -88,11 +88,21 @@ module.exports.find = function find(query) {
     }
 
     for (var i = 0; i < phoneBook.length; i++) {
+        var matchFound = false;
         var phoneBookEntry = phoneBook[i];
         var phoneBookEntryKeys = Object.keys(phoneBookEntry);
         for (var j = 0; j < phoneBookEntryKeys.length; j++) {
             var key = phoneBookEntryKeys[j];
             if (phoneBookEntry[key].indexOf(query) != -1) {
+                matchFound = true;
+            }
+            if (key === 'phone') {
+                var formattedPhone = formatPhone(phoneBookEntry[key]);
+                if (formattedPhone.indexOf(query) != -1) {
+                   matchFound = true; 
+                }
+            }
+            if (matchFound) {
                 console.log([
                     phoneBookEntry.name,
                     formatPhone(phoneBookEntry.phone),
@@ -108,11 +118,21 @@ module.exports.remove = function remove(query) {
 
     var entriesRemoved = 0;
     for (var i = 0; i < phoneBook.length; i++) {
+        var matchFound = false;
         var phoneBookEntry = phoneBook[i];
         var phoneBookEntryKeys = Object.keys(phoneBookEntry);
         for (var j = 0; j < phoneBookEntryKeys.length; j++) {
             var key = phoneBookEntryKeys[j];
             if (phoneBookEntry[key].indexOf(query) != -1) {
+                matchFound = true;
+            }
+            if (key === 'phone') {
+                var formattedPhone = formatPhone(phoneBookEntry[key]);
+                if (formattedPhone.indexOf(query) != -1) {
+                   matchFound = true; 
+                }
+            }
+            if (matchFound) {
                 phoneBook.splice(i, 1);
                 i -= 1;
                 entriesRemoved += 1;

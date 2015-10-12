@@ -57,13 +57,12 @@ module.exports.add = function add(name, phone, email) {
 
 module.exports.find = function find(query) {
 
-    var searchPatt = new RegExp(query);
     for (var i = 0; i < phoneBook.length; i++) {
         var phoneBookEntry = phoneBook[i];
         var phoneBookEntryKeys = Object.keys(phoneBookEntry);
         for (var j = 0; j < phoneBookEntryKeys.length; j++) {
             var key = phoneBookEntryKeys[j];
-            if (searchPatt.test(phoneBookEntry[key])) {
+            if (phoneBookEntry[key].indexOf(query) != -1) {
                 console.log([
                     phoneBookEntry.name, 
                     phoneBookEntry.phone, 
@@ -78,14 +77,14 @@ module.exports.find = function find(query) {
 module.exports.remove = function remove(query) {
 
     var entriesRemoved = 0;
-    var searchPatt = new RegExp(query);
     for (var i = 0; i < phoneBook.length; i++) {
         var phoneBookEntry = phoneBook[i];
         var phoneBookEntryKeys = Object.keys(phoneBookEntry);
         for (var j = 0; j < phoneBookEntryKeys.length; j++) {
             var key = phoneBookEntryKeys[j];
-            if (searchPatt.test(phoneBookEntry[key])) {
+            if (phoneBookEntry[key].indexOf(query) != -1) {
                 phoneBook.splice(i, 1);
+                i -= 1;
                 entriesRemoved += 1;
                 break;
             }
@@ -129,14 +128,14 @@ module.exports.showTable = function showTable(filename) {
 
     for (var i = 0; i < tableData.length; i++) {
         var tableDataEntry = tableData[i];
-        if (tableDataEntry['name'].length > nameColumnWidth) {
-            nameColumnWidth = tableDataEntry['name'].length;
+        if (tableDataEntry.name.length > nameColumnWidth) {
+            nameColumnWidth = tableDataEntry.name.length;
         }
-        if (tableDataEntry['phone'].length > phoneColumnWidth) {
-            phoneColumnWidth = tableDataEntry['phone'].length;
+        if (tableDataEntry.phone.length > phoneColumnWidth) {
+            phoneColumnWidth = tableDataEntry.phone.length;
         }
-        if (tableDataEntry['email'].length > emailColumnWidth) {
-            emailColumnWidth = tableDataEntry['email'].length;
+        if (tableDataEntry.email.length > emailColumnWidth) {
+            emailColumnWidth = tableDataEntry.email.length;
         }
     }
     

@@ -23,9 +23,12 @@ module.exports.add = function add(name, phone, email) {
     }
     
     var validPhone = /^(\+?\s*\d+\s*)?(\(\d+\)|\d+)(\s*\-?\s*\d+){1,}$/;;
-        
+    
     if (!validPhone.test(phone)) {
         return;
+    }
+    else {
+        phone = phoneDigits.join('');
     }
     
     var validEmail = /^[\w\.!#$%&'*+\-\/=?\^_`{|}~]+@[\w\-]+(\.[\w]+){1,}$/;
@@ -55,14 +58,29 @@ module.exports.add = function add(name, phone, email) {
     return true;
 };
 
+function formatPhone(phone) {
+    var formattedPhone = "";
+    var parsedPhone = phone.match(/^(\d+)?(\d{3})(\d{3})(\d{1})(\d{3})$/);
+    if (!parsedPhone) {
+        return phone;
+    }
+    if (parsedPhone[1]) {
+        formattedPhone += '+' + parsedPhone[1] + ' ';
+    }
+    formattedPhone += '(' + parsedPhone[2] + ') ';
+    formattedPhone += [parsedPhone[3], parsedPhone[4], parsedPhone[5]].join('-');
+    return formattedPhone;
+}
+
 module.exports.find = function find(query) {
 
     if (!query) {
         for (var i = 0; i < phoneBook.length; i++) {
             var phoneBookEntry = phoneBook[i];
+            
             console.log([
                 phoneBookEntry.name,
-                phoneBookEntry.phone,
+                formatPhone(phoneBookEntry.phone),
                 phoneBookEntry.email
                 ].join(', '));
         }
@@ -77,7 +95,7 @@ module.exports.find = function find(query) {
             if (phoneBookEntry[key].indexOf(query) != -1) {
                 console.log([
                     phoneBookEntry.name,
-                    phoneBookEntry.phone,
+                    formatPhone(phoneBookEntry.phone),
                     phoneBookEntry.email
                     ].join(', '));
                 break;
@@ -140,6 +158,7 @@ module.exports.showTable = function showTable(filename) {
 
     for (var i = 0; i < tableData.length; i++) {
         var tableDataEntry = tableData[i];
+        tableDataEntry.phone = formatPhone(tableDataEntry.phone);
         if (tableDataEntry.name.length > nameColumnWidth) {
             nameColumnWidth = tableDataEntry.name.length;
         }

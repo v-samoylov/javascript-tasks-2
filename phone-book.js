@@ -57,6 +57,18 @@ module.exports.add = function add(name, phone, email) {
 
 module.exports.find = function find(query) {
 
+    if (!query) {
+        for (var i = 0; i < phoneBook.length; i++) {
+            var phoneBookEntry = phoneBook[i];
+            console.log([
+                phoneBookEntry.name,
+                phoneBookEntry.phone,
+                phoneBookEntry.email
+                ].join(', '));
+        }
+        return;
+    }
+
     for (var i = 0; i < phoneBook.length; i++) {
         var phoneBookEntry = phoneBook[i];
         var phoneBookEntryKeys = Object.keys(phoneBookEntry);
@@ -64,8 +76,8 @@ module.exports.find = function find(query) {
             var key = phoneBookEntryKeys[j];
             if (phoneBookEntry[key].indexOf(query) != -1) {
                 console.log([
-                    phoneBookEntry.name, 
-                    phoneBookEntry.phone, 
+                    phoneBookEntry.name,
+                    phoneBookEntry.phone,
                     phoneBookEntry.email
                     ].join(', '));
                 break;

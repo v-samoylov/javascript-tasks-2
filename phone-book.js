@@ -3,7 +3,6 @@
 var phoneBook = [];
 
 module.exports.add = function add(name, phone, email) {
-
     name  = name.trim();
     phone = phone.trim();
     email = email.trim();
@@ -22,7 +21,7 @@ module.exports.add = function add(name, phone, email) {
         return;
     }
     
-    var validPhone = /^(\+?\s*\d+\s*)?(\(\d+\)|\d+)(\s*\-?\s*\d+){1,}$/;;
+    var validPhone = /^(\+?\s*\d+\s*)?(\(\d+\)|\d+)(\s*\-?\s*\d+){1,}$/;
     
     if (!validPhone.test(phone)) {
         return;
@@ -31,32 +30,37 @@ module.exports.add = function add(name, phone, email) {
         phone = phoneDigits.join('');
     }
     
-    var validEmail = /^[\w\.!#$%&'*+\-\/=?\^_`{|}~]+@[\w\-]+(\.[\w]+){1,}$/;
+    var validEmail = /^[A-z\d\.!#$%&'*+\-\/=?\^`{|}~]+@[A-zА-я\-]+(\.[A-zА-я]+){1,}$/; 
     
     var invalidEmails = [
         "^\\.|\\.@|\\.\\.",
         "@.+-\\.|@-"
-        ];
+    ];
     
     if (!validEmail.test(email)) {
         return;
     }
+    
     for (var i = 0; i < invalidEmails.length; i++) {
         var patt = new RegExp(invalidEmails[i]);
         if (patt.test(email)) {
             return;
         }
     }
-
+    
     var phoneBookEntry = {
         name:  name,
         phone: phone,
         email: email
     };
-
+    
     phoneBook.push(phoneBookEntry);
     return true;
 };
+
+function getIndent(size) {
+    return Array(size).join(' ');
+}
 
 function formatPhone(phone) {
     var formattedPhone = "";
@@ -73,11 +77,9 @@ function formatPhone(phone) {
 }
 
 module.exports.find = function find(query) {
-
     if (!query) {
         for (var i = 0; i < phoneBook.length; i++) {
             var phoneBookEntry = phoneBook[i];
-            
             console.log([
                 phoneBookEntry.name,
                 formatPhone(phoneBookEntry.phone),
@@ -86,11 +88,11 @@ module.exports.find = function find(query) {
         }
         return;
     }
-
     for (var i = 0; i < phoneBook.length; i++) {
         var matchFound = false;
         var phoneBookEntry = phoneBook[i];
         var phoneBookEntryKeys = Object.keys(phoneBookEntry);
+        
         for (var j = 0; j < phoneBookEntryKeys.length; j++) {
             var key = phoneBookEntryKeys[j];
             if (phoneBookEntry[key].indexOf(query) != -1) {
@@ -115,12 +117,13 @@ module.exports.find = function find(query) {
 };
 
 module.exports.remove = function remove(query) {
-
     var entriesRemoved = 0;
+    
     for (var i = 0; i < phoneBook.length; i++) {
         var matchFound = false;
         var phoneBookEntry = phoneBook[i];
         var phoneBookEntryKeys = Object.keys(phoneBookEntry);
+        
         for (var j = 0; j < phoneBookEntryKeys.length; j++) {
             var key = phoneBookEntryKeys[j];
             if (phoneBookEntry[key].indexOf(query) != -1) {
@@ -143,11 +146,11 @@ module.exports.remove = function remove(query) {
     console.log(entriesRemoved + ' contact(s) have been deleted!');
 };
 
-module.exports.importFromCsv = function importFromCsv(filename) {
-    
+module.exports.importFromCsv = function importFromCsv(filename) {    
     var contactsAdded = 0;
     var data = require('fs').readFileSync(filename, 'utf-8');
     var dataLines = data.split('\n');
+    
     for (var i = 0; i < dataLines.length; i++) {
         var dataLine = dataLines[i].replace('\r', '');
         var dataLineFields = dataLine.split(';');
@@ -164,7 +167,6 @@ module.exports.importFromCsv = function importFromCsv(filename) {
 };
 
 module.exports.showTable = function showTable(filename) {
-
     var header = {
         name:  'Name',
         phone: 'Phone',
@@ -192,9 +194,9 @@ module.exports.showTable = function showTable(filename) {
     
     var tableWidth = nameColumnWidth + phoneColumnWidth + emailColumnWidth + 10;
     var emptyTableRow = '▓' + 
-        Array(nameColumnWidth  + 2).join(' ') + ' │' +
-        Array(phoneColumnWidth + 2).join(' ') + ' │' +
-        Array(emailColumnWidth + 2).join(' ') + ' ▓';
+        getIndent(nameColumnWidth  + 2)  + ' │' +
+        getIndent(phoneColumnWidth  + 2) + ' │' +
+        getIndent(emailColumnWidth  + 2) + ' ▓';
     
     console.log(Array(tableWidth + 1).join('░'));
 
@@ -209,9 +211,9 @@ module.exports.showTable = function showTable(filename) {
         var phoneCellOffset = phoneColumnWidth - phoneCellData.length + 1;
         var emailCellOffset = emailColumnWidth - emailCellData.length + 1;
         
-        var nameCell  = nameCellData  + Array(nameCellOffset).join(' ');
-        var phoneCell = phoneCellData + Array(phoneCellOffset).join(' ');
-        var emailCell = emailCellData + Array(emailCellOffset).join(' ');
+        var nameCell  = nameCellData  + getIndent(nameCellOffset);
+        var phoneCell = phoneCellData + getIndent(phoneCellOffset);
+        var emailCell = emailCellData + getIndent(emailCellOffset);
         
         var tableRow = '▓ ' + [nameCell, phoneCell, emailCell].join(' │ ') + ' ▓';
 
